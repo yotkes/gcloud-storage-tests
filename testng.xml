@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="GCloud Storage CLI Tests" parallel="false">
+    <test name="CLI Test Suite">
+        <classes>
+            <class name="com.cloud.testing.GCloudStorageTests"/>
+        </classes>
+    </test>
+</suite>

@@ -109,16 +109,6 @@ echo "Test content" > test-file.txt
 gcloud storage cp test-file.txt gs://your-bucket-name/
 ```
 
-### **3️⃣ GitHub Push Blocked Due to Secrets**
-
-If GitHub blocks your push due to a secret key, **remove it from Git history**:
-
-```sh
-git rm --cached path/to/secret-file.json
-git commit --amend --all -m "Removed secret file"
-git push origin main --force
-```
-
 ## 📜 License
 
 This project is for testing purposes and follows **Google Cloud's best practices**.

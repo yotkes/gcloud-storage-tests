@@ -50,7 +50,7 @@ Before running the tests, ensure you have the following installed:
      export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
      ```
    - **Make the environment variable persistent across terminal sessions:**
-     - **For Bash ( or ):**
+     - **For Bash:**
        ```sh
        echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.bashrc
        source ~/.bashrc

@@ -12,8 +12,7 @@ public class GCloudStorageTests {
 
     @BeforeClass
     public void setup() {
-        System.setProperty("GOOGLE_APPLICATION_CREDENTIALS",
-                "/Users/yotkes/Desktop/Work/Mend/gcloud-storage-tests/my-service-account-key.json");
+        System.setProperty("GOOGLE_APPLICATION_CREDENTIALS", System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
     }
 
     @SuppressWarnings("deprecation")

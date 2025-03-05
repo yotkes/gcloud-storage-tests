@@ -1,4 +1,5 @@
 target/
 .idea/
 *.iml
-*.log
+*.logmy-service-account-key.json
+my-service-account-key.json

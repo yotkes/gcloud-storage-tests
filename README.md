@@ -45,9 +45,24 @@ Before running the tests, ensure you have the following installed:
      mkdir -p ~/.gcp
      mv my-service-account-key.json ~/.gcp/
      ```
-   - **Set the environment variable**:
+   - **Set the environment variable (for current session only):**
      ```sh
      export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
+     ```
+   - **Make the environment variable persistent across terminal sessions:**
+     - **For Bash ( or ):**
+       ```sh
+       echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.bashrc
+       source ~/.bashrc
+       ```
+     - **For Zsh ( - default on macOS):**
+       ```sh
+       echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.zshrc
+       source ~/.zshrc
+       ```
+   - **Verify it’s set correctly:**
+     ```sh
+     echo $GOOGLE_APPLICATION_CREDENTIALS
      ```
 
 5. **Install Playwright for Signed URL Security Testing**

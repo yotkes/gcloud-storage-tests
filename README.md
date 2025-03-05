@@ -2,8 +2,10 @@
 
 ## 📌 Overview
 
-This project is an **automated testing framework** for the **Google Cloud Storage CLI**.  
+This project is an **automated testing framework** for the **Google Cloud Storage CLI (`gcloud storage`)**.  
 It validates the execution of key storage commands, including **bucket creation, file upload, file listing, file deletion, and signed URLs**.
+
+---
 
 ## 🛠️ Prerequisites
 
@@ -37,6 +39,7 @@ Before running the tests, ensure you have the following installed:
 
 4. **Ensure You Have a Service Account Key** (if required)  
    If authentication with a service account is needed:
+
    - **Move the key to a secure location**:
      ```sh
      mkdir -p ~/.gcp
@@ -47,6 +50,27 @@ Before running the tests, ensure you have the following installed:
      export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
      ```
 
+5. **Install Playwright for Signed URL Security Testing**
+   - Verify Playwright is installed:
+     ```sh
+     mvn dependency:tree | grep playwright
+     ```
+   - If missing, add this to `pom.xml`:
+     ```xml
+     <dependency>
+         <groupId>com.microsoft.playwright</groupId>
+         <artifactId>playwright</artifactId>
+         <version>1.39.0</version>
+         <scope>test</scope>
+     </dependency>
+     ```
+   - Reload Maven dependencies:
+     ```sh
+     mvn clean install
+     ```
+
+---
+
 ## 🚀 Running Tests
 
 Once everything is set up, you can **run all tests** with:
@@ -55,25 +79,32 @@ Once everything is set up, you can **run all tests** with:
 mvn test
 ```
 
+---
+
 ## 📂 Test Structure
 
 The following tests validate key `gcloud storage` commands:
 
-| **Test Name**     | **Command Tested**                                                           |
-| ----------------- | ---------------------------------------------------------------------------- |
-| **Create Bucket** | `gcloud storage buckets create gs://your-bucket-name --location=us-central1` |
-| **Upload File**   | `gcloud storage cp local-file.txt gs://your-bucket-name/`                    |
-| **List Files**    | `gcloud storage ls gs://your-bucket-name/`                                   |
-| **Sign URL**      | `gcloud storage sign-url gs://your-bucket-name/object-name --duration=1h`    |
-| **Delete File**   | `gcloud storage rm gs://your-bucket-name/object-name`                        |
+| **Test Name**           | **Command Tested**                                                           |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| **Create Bucket**       | `gcloud storage buckets create gs://your-bucket-name --location=us-central1` |
+| **Upload File**         | `gcloud storage cp local-file.txt gs://your-bucket-name/`                    |
+| **List Files**          | `gcloud storage ls gs://your-bucket-name/`                                   |
+| **Sign URL**            | `gcloud storage sign-url gs://your-bucket-name/object-name --duration=1h`    |
+| **Signed URL Security** | Opens signed URL in Chrome to detect phishing warnings.                      |
+| **Delete File**         | `gcloud storage rm gs://your-bucket-name/object-name`                        |
 
 Tests are located in:  
 📁 **`src/test/java/com/cloud/testing/GCloudStorageTests.java`**
 
-## Expanding the Framework
+---
+
+## 🛠️ Expanding the Framework
 
 - Add new test cases under **`src/test/java/com/cloud/testing/`**.
 - Modify **`pom.xml`** to add additional dependencies if required.
+
+---
 
 ## 🛠️ Troubleshooting
 
@@ -92,6 +123,8 @@ If using a **service account**, set up authentication:
 export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
 ```
 
+---
+
 ### **2️⃣ Test Failures Due to Missing Resources**
 
 **Error:** `Bucket does not exist`  
@@ -109,6 +142,52 @@ echo "Test content" > test-file.txt
 gcloud storage cp test-file.txt gs://your-bucket-name/
 ```
 
+**Important:**
+
+- `testListFiles()` expects **a file to exist** before listing.
+- `testDeleteFile()` **uploads a file before deleting it.**
+
+---
+
+### **3️⃣ Signed URL Security Test Fails**
+
+#### Issue: The test gets stuck or fails with `"Cannot navigate to invalid URL"`
+
+✅ **Fix:** Run Playwright in **headed mode** to debug:
+
+```java
+Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+```
+
+✅ **Check if Chrome flags the URL as phishing:**
+
+- Run `gcloud storage sign-url gs://your-bucket-name/test-file.txt --duration=1h`
+- Open the **signed URL manually** in Chrome.
+- If Chrome blocks the URL, **your test will fail**.
+
+---
+
+### **4️⃣ Viewing Test Results**
+
+Test results are automatically generated in:
+
+```
+target/surefire-reports/
+```
+
+- View in **terminal**:
+  ```sh
+  cat target/surefire-reports/testng-results.xml
+  ```
+- View in a **browser** (if using an HTML plugin):
+  ```sh
+  open target/surefire-reports/index.html
+  ```
+
+---
+
 ## 📜 License
 
 This project is for testing purposes and follows **Google Cloud's best practices**.
+
+---

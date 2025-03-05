@@ -52,32 +52,6 @@ Before running the tests, ensure you have the following installed:
 Once everything is set up, you can **run all tests** with:
 
 ```sh
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 mvn test
 ```
 
@@ -115,8 +89,6 @@ gcloud auth login
 If using a **service account**, set up authentication:
 
 ```sh
-
-
 export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
 ```
 
@@ -133,8 +105,6 @@ gcloud storage buckets create gs://your-bucket-name --location=us-central1
 ✅ **Fix:** Upload a test file:
 
 ```sh
-
-
 echo "Test content" > test-file.txt
 gcloud storage cp test-file.txt gs://your-bucket-name/
 ```

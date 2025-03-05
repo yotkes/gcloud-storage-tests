@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-This project is an **automated testing framework** for the **Google Cloud Storage CLI ()**.  
+This project is an **automated testing framework** for the **Google Cloud Storage CLI**.  
 It validates the execution of key storage commands, including **bucket creation, file upload, file listing, file deletion, and signed URLs**.
 
 ## 🛠️ Prerequisites
@@ -70,7 +70,7 @@ The following tests validate key `gcloud storage` commands:
 Tests are located in:  
 📁 **`src/test/java/com/cloud/testing/GCloudStorageTests.java`**
 
-## ��️ Expanding the Framework
+## Expanding the Framework
 
 - Add new test cases under **`src/test/java/com/cloud/testing/`**.
 - Modify **`pom.xml`** to add additional dependencies if required.
@@ -107,16 +107,6 @@ gcloud storage buckets create gs://your-bucket-name --location=us-central1
 ```sh
 echo "Test content" > test-file.txt
 gcloud storage cp test-file.txt gs://your-bucket-name/
-```
-
-### **3️⃣ GitHub Push Blocked Due to Secrets**
-
-If GitHub blocks your push due to a secret key, **remove it from Git history**:
-
-```sh
-git rm --cached path/to/secret-file.json
-git commit --amend --all -m "Removed secret file"
-git push origin main --force
 ```
 
 ## 📜 License

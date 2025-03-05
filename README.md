@@ -70,7 +70,7 @@ The following tests validate key `gcloud storage` commands:
 Tests are located in:  
 📁 **`src/test/java/com/cloud/testing/GCloudStorageTests.java`**
 
-## ��️ Expanding the Framework
+## Expanding the Framework
 
 - Add new test cases under **`src/test/java/com/cloud/testing/`**.
 - Modify **`pom.xml`** to add additional dependencies if required.

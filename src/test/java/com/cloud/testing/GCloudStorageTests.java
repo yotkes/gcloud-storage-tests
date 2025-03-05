@@ -1,12 +1,15 @@
 
 package com.cloud.testing;
 
+import com.microsoft.playwright.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GCloudStorageTests {
 
@@ -32,6 +35,52 @@ public class GCloudStorageTests {
         }
 
         return output.toString().trim();
+    }
+
+    @Test
+    public void testSignUrlSecurity() throws Exception {
+        String bucketName = "gcloud-storage-tests-bucket-1";
+        String objectName = "test-file.txt";
+        String signUrlCommand = "gcloud storage sign-url gs://" + bucketName + "/" + objectName + " --duration=1h";
+
+        // Run the command and extract the signed URL
+        String result = runCommand(signUrlCommand);
+        System.out.println("Raw Signed URL Output:\n" + result);
+
+        // Extract the URL using regex
+        Pattern pattern = Pattern.compile("(https://storage.googleapis.com[^\n]+)");
+        Matcher matcher = pattern.matcher(result);
+        String signedUrl = matcher.find() ? matcher.group(1) : "";
+
+        if (signedUrl.isEmpty()) {
+            throw new Exception("Failed to extract the signed URL from the command output.");
+        }
+
+        System.out.println("Extracted Signed URL: " + signedUrl);
+
+        // Launch Chrome using Playwright
+        try (Playwright playwright = Playwright.create()) {
+            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+            Page page = browser.newPage();
+
+            // Try to open the signed URL with a timeout (5 seconds)
+            try {
+                page.navigate(signedUrl, new Page.NavigateOptions().setTimeout(5000));
+            } catch (Exception e) {
+                System.out.println("Navigation timeout: Possible phishing warning or slow network.");
+                throw new Exception("Navigation failed: " + e.getMessage());
+            }
+
+            // Check for phishing warnings in the page content
+            boolean isBlocked = page.content().toLowerCase().contains("phishing") ||
+                    page.content().toLowerCase().contains("warning") ||
+                    page.content().toLowerCase().contains("deceptive site");
+
+            browser.close();
+
+            Assert.assertFalse(isBlocked, "Signed URL triggered a phishing warning in Chrome.");
+            System.out.println("Signed URL is accessible without phishing warnings.");
+        }
     }
 
     @Test
@@ -94,12 +143,17 @@ public class GCloudStorageTests {
     @Test
     public void testListFiles() throws Exception {
         String bucketName = "gcloud-storage-tests-bucket-1";
+        String filePath = "test-file-for-list.txt";
+
+        // Upload a test file before listing files
+        runCommand("echo 'Temporary file' > " + filePath);
+        runCommand("gcloud storage cp " + filePath + " gs://" + bucketName + "/");
+
         String listFilesCommand = "gcloud storage ls gs://" + bucketName + "/";
-
         String result = runCommand(listFilesCommand);
-        System.out.println("List Files Output: \n" + result);
 
-        Assert.assertTrue(result.contains("test-file.txt"), "File listing failed.");
+        System.out.println("List Files Output: \n" + result);
+        Assert.assertTrue(result.contains(filePath), "File listing failed.");
     }
 
     @Test

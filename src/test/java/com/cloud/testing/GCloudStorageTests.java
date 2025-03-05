@@ -63,7 +63,7 @@ public class GCloudStorageTests {
     @Test
     public void testUploadFile() throws Exception {
         String bucketName = "gcloud-storage-tests-bucket-1";
-        String filePath = "test-file-2.txt";
+        String filePath = "test-file.txt";
 
         // Create the test file
         runCommand("echo 'Test content' > " + filePath);

@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-This project is an **automated testing framework** for the **Google Cloud Storage CLI ()**.  
+This project is an **automated testing framework** for the **Google Cloud Storage CLI**.  
 It validates the execution of key storage commands, including **bucket creation, file upload, file listing, file deletion, and signed URLs**.
 
 ## 🛠️ Prerequisites

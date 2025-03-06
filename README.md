@@ -11,78 +11,107 @@ It validates the execution of key storage commands, including **bucket creation,
 
 Before running the tests, ensure you have the following installed:
 
-1. **[Google Cloud CLI](https://cloud.google.com/sdk/docs/install)**
+1.  **[Google Cloud CLI](https://cloud.google.com/sdk/docs/install)**
 
-   - Verify installation with:
-     ```sh
-     gcloud --version
-     ```
-   - Authenticate and set up your Google Cloud project:
-     ```sh
-     gcloud auth login
-     gcloud config set project YOUR_PROJECT_ID
-     ```
+    - Verify installation with:
+      ```sh
+      gcloud --version
+      ```
+    - If you don’t have a Google Cloud project, create one first:
+      ```sh
+      gcloud projects create YOUR_PROJECT_ID
+      gcloud config set project YOUR_PROJECT_ID
+      ```
+    - Authenticate and set up your Google Cloud project:
+      ```sh
+      gcloud auth login
+      gcloud config set project YOUR_PROJECT_ID
+      ```
 
-2. **Enable Required Google Cloud APIs:**  
-   Run:
+2.  **Enable Required Google Cloud APIs:**
+    Run:
 
-   ```sh
-   gcloud services enable storage.googleapis.com
-   ```
+    ```sh
+    gcloud services enable storage.googleapis.com
+    ```
 
-3. **[Maven](https://maven.apache.org/)** (For dependency management)
+3.  **[Maven](https://maven.apache.org/)** (For dependency management)
 
-   - Verify installation with:
-     ```sh
-     mvn -version
-     ```
+    - Verify installation with:
+      ```sh
+      mvn -version
+      ```
 
-4. **Ensure You Have a Service Account Key** (if required)  
-   If authentication with a service account is needed:
+4.  **Ensure You Have a Service Account Key** (if required)
+    If authentication with a service account is needed:
 
-   - **Move the key to a secure location**:
-     ```sh
-     mkdir -p ~/.gcp
-     mv my-service-account-key.json ~/.gcp/
-     ```
-   - **Set the environment variable (for current session only):**
-     ```sh
-     export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
-     ```
-   - **Make the environment variable persistent across terminal sessions:**
-     - **For Bash:**
-       ```sh
-       echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.bashrc
-       source ~/.bashrc
-       ```
-     - **For Zsh ( - default on macOS):**
-       ```sh
-       echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.zshrc
-       source ~/.zshrc
-       ```
-   - **Verify it’s set correctly:**
-     ```sh
-     echo $GOOGLE_APPLICATION_CREDENTIALS
-     ```
+    - **Move the key to a secure location**:
+      ```sh
+      mkdir -p ~/.gcp
+      mv my-service-account-key.json ~/.gcp/
+      ```
+    - **Set the environment variable (for current session only):**
+      ```sh
+      export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json
+      ```
+    - **Make the environment variable persistent across terminal sessions:**
+      - **For Bash:**
+        ```sh
+        echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.bashrc
+        source ~/.bashrc
+        ```
+      - **For Zsh ( - default on macOS):**
+        ```sh
+        echo 'export GOOGLE_APPLICATION_CREDENTIALS=~/.gcp/my-service-account-key.json' >> ~/.zshrc
+        source ~/.zshrc
+        ```
+    - **Verify it’s set correctly:**
+      ```sh
+      echo $GOOGLE_APPLICATION_CREDENTIALS
+      ```
 
-5. **Install Playwright for Signed URL Security Testing**
-   - Verify Playwright is installed:
-     ```sh
-     mvn dependency:tree | grep playwright
-     ```
-   - If missing, add this to `pom.xml`:
-     ```xml
-     <dependency>
-         <groupId>com.microsoft.playwright</groupId>
-         <artifactId>playwright</artifactId>
-         <version>1.39.0</version>
-         <scope>test</scope>
-     </dependency>
-     ```
-   - Reload Maven dependencies:
-     ```sh
-     mvn clean install
-     ```
+5.  **Install Playwright for Signed URL Security Testing**
+
+        - Install Playwright (required for signed URL security test)
+          mvn dependency:resolve
+
+        - Verify Playwright is installed:
+          ```sh
+          mvn dependency:tree | grep playwright|| echo "Playwright is missing! Add it to pom.xml."
+          ```
+        - If missing, add this to `pom.xml`:
+          ```xml
+          <dependency>
+              <groupId>com.microsoft.playwright</groupId>
+              <artifactId>playwright</artifactId>
+              <version>1.39.0</version>
+              <scope>test</scope>
+          </dependency>
+          ```
+        - Reload Maven dependencies:
+          `sh
+         mvn clean install
+        `
+
+6.  **Ensure you are working in the correct Google Cloud project**
+
+    ```sh
+    gcloud config list --format="value(core.project)"
+    ```
+
+7.  **Ensure the Test Bucket and File Exist**
+
+    ```sh
+    gcloud storage buckets create gs://gcloud-storage-tests-bucket-1 --location=us-central1 || echo "Bucket already exists"
+    echo "Sample test file for signed URL test" > test-file.txt
+    gcloud storage cp test-file.txt gs://gcloud-storage-tests-bucket-1/
+    ```
+
+8.  **Clone the Repository**
+    ```sh
+    git clone https://github.com/yotkes/gcloud-storage-tests.git
+    cd gcloud-storage-tests
+    ```
 
 ---
 
@@ -90,7 +119,7 @@ Before running the tests, ensure you have the following installed:
 
 ### **Ensure the Test Bucket and File Exist**
 
-Before running the tests, the required **Google Cloud Storage bucket** and `test-file.txt` must exist.  
+Before running the tests, the required **Google Cloud Storage bucket** and `test-file.txt` must exist.
 The test framework **automatically sets these up**, but you can create them manually if needed:
 
 ````sh

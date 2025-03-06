@@ -50,7 +50,6 @@ public class GCloudStorageTests {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private String runCommand(String command) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", command);
         processBuilder.redirectErrorStream(true); // Merges stdout and stderr

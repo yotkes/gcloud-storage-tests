@@ -134,11 +134,10 @@ gcloud storage buckets create gs://gcloud-storage-tests-bucket-1 --location=us-c
 # Create and upload test-file.txt (for Signed URL test)
 echo "Sample test file for signed URL test" > test-file.txt
 gcloud storage cp test-file.txt gs://gcloud-storage-tests-bucket-1/
-
-Once everything is set up, you can **run all tests** with:
 ```
 
 ```sh
+# Once everything is set up, you can **run all tests** with:
 mvn test
 ```
 

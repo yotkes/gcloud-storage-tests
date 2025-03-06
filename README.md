@@ -88,11 +88,24 @@ Before running the tests, ensure you have the following installed:
 
 ## 🚀 Running Tests
 
+### **Ensure the Test Bucket and File Exist**
+
+Before running the tests, the required **Google Cloud Storage bucket** and `test-file.txt` must exist.  
+The test framework **automatically sets these up**, but you can create them manually if needed:
+
+````sh
+# Create the test bucket (if it doesn't exist)
+gcloud storage buckets create gs://gcloud-storage-tests-bucket-1 --location=us-central1 || echo "Bucket already exists"
+
+# Create and upload test-file.txt (for Signed URL test)
+echo "Sample test file for signed URL test" > test-file.txt
+gcloud storage cp test-file.txt gs://gcloud-storage-tests-bucket-1/
+
 Once everything is set up, you can **run all tests** with:
 
 ```sh
 mvn test
-```
+````
 
 ---
 

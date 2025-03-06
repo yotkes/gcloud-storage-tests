@@ -73,29 +73,30 @@ Before running the tests, ensure you have the following installed:
 
 5.  **Install Playwright for Signed URL Security Testing**
 
-    - Install Playwright (required for signed URL security test)
+        - Install Playwright (required for signed URL security test)
 
-    ```sh
-      mvn dependency:resolve
-    ```
+        ```sh
+          mvn dependency:resolve
+        ```
 
-    - Verify Playwright is installed:
-      ```sh
-      mvn dependency:tree | grep playwright|| echo "Playwright is missing! Add it to pom.xml."
-      ```
-    - If missing, add this to `pom.xml`:
-      ```xml
-      <dependency>
-          <groupId>com.microsoft.playwright</groupId>
-          <artifactId>playwright</artifactId>
-          <version>1.39.0</version>
-          <scope>test</scope>
-      </dependency>
-      ```
-    - Reload Maven dependencies:
-      `sh
-mvn clean install
-`
+        - Verify Playwright is installed:
+          ```sh
+          mvn dependency:tree | grep playwright|| echo "Playwright is missing! Add it to pom.xml."
+          ```
+        - If missing, add this to `pom.xml`:
+          ```xml
+          <dependency>
+              <groupId>com.microsoft.playwright</groupId>
+              <artifactId>playwright</artifactId>
+              <version>1.39.0</version>
+              <scope>test</scope>
+          </dependency>
+          ```
+        - Reload Maven dependencies:
+          `sh
+
+    mvn clean install
+    `
 
 6.  **Ensure you are working in the correct Google Cloud project**
 
@@ -126,7 +127,7 @@ mvn clean install
 Before running the tests, the required **Google Cloud Storage bucket** and `test-file.txt` must exist.
 The test framework **automatically sets these up**, but you can create them manually if needed:
 
-````sh
+```sh
 # Create the test bucket (if it doesn't exist)
 gcloud storage buckets create gs://gcloud-storage-tests-bucket-1 --location=us-central1 || echo "Bucket already exists"
 
@@ -135,10 +136,11 @@ echo "Sample test file for signed URL test" > test-file.txt
 gcloud storage cp test-file.txt gs://gcloud-storage-tests-bucket-1/
 
 Once everything is set up, you can **run all tests** with:
+```
 
 ```sh
 mvn test
-````
+```
 
 ---
 

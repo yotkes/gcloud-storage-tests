@@ -29,7 +29,8 @@ Before running the tests, ensure you have the following installed:
       ```
 
 2.  **Enable Required Google Cloud APIs:**
-    Run:
+
+    - Run:
 
     ```sh
     gcloud services enable storage.googleapis.com

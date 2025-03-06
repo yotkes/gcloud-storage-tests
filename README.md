@@ -73,26 +73,26 @@ Before running the tests, ensure you have the following installed:
 
 5.  **Install Playwright for Signed URL Security Testing**
 
-        - Install Playwright (required for signed URL security test)
-          mvn dependency:resolve
+    - Install Playwright (required for signed URL security test)
+      mvn dependency:resolve
 
-        - Verify Playwright is installed:
-          ```sh
-          mvn dependency:tree | grep playwright|| echo "Playwright is missing! Add it to pom.xml."
-          ```
-        - If missing, add this to `pom.xml`:
-          ```xml
-          <dependency>
-              <groupId>com.microsoft.playwright</groupId>
-              <artifactId>playwright</artifactId>
-              <version>1.39.0</version>
-              <scope>test</scope>
-          </dependency>
-          ```
-        - Reload Maven dependencies:
-          `sh
-         mvn clean install
-        `
+    - Verify Playwright is installed:
+      ```sh
+      mvn dependency:tree | grep playwright|| echo "Playwright is missing! Add it to pom.xml."
+      ```
+    - If missing, add this to `pom.xml`:
+      ```xml
+      <dependency>
+          <groupId>com.microsoft.playwright</groupId>
+          <artifactId>playwright</artifactId>
+          <version>1.39.0</version>
+          <scope>test</scope>
+      </dependency>
+      ```
+    - Reload Maven dependencies:
+      `sh
+  mvn clean install
+  `
 
 6.  **Ensure you are working in the correct Google Cloud project**
 

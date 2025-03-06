@@ -14,8 +14,40 @@ import java.util.regex.Pattern;
 public class GCloudStorageTests {
 
     @BeforeClass
-    public void setup() {
+    public void setup() throws Exception {
         System.setProperty("GOOGLE_APPLICATION_CREDENTIALS", System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
+
+        String bucketName = "gcloud-storage-tests-bucket-1";
+        String testFileName = "test-file.txt";
+
+        // Check if the bucket exists
+        String checkBucketCommand = "gcloud storage buckets list --format='value(name)' | grep '^" + bucketName + "$'";
+        String bucketExists = runCommand(checkBucketCommand);
+
+        if (bucketExists.isEmpty()) {
+            System.out.println("Bucket not found. Creating: " + bucketName);
+            String createBucketCommand = "gcloud storage buckets create gs://" + bucketName + " --location=us-central1";
+            String result = runCommand(createBucketCommand);
+            System.out.println("Bucket creation output:\n" + result);
+        } else {
+            System.out.println("Bucket already exists: " + bucketName);
+        }
+
+        // Check if test-file.txt exists in the bucket
+        String checkFileCommand = "gcloud storage ls gs://" + bucketName + "/" + testFileName;
+        String fileExists = runCommand(checkFileCommand);
+
+        if (fileExists.isEmpty()) {
+            System.out.println("Test file not found. Creating and uploading: " + testFileName);
+            String createTestFileCommand = "echo 'Sample test file for signed URL test' > " + testFileName;
+            runCommand(createTestFileCommand);
+
+            String uploadFileCommand = "gcloud storage cp " + testFileName + " gs://" + bucketName + "/";
+            String uploadResult = runCommand(uploadFileCommand);
+            System.out.println("Test file upload output:\n" + uploadResult);
+        } else {
+            System.out.println("Test file already exists in the bucket.");
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -112,7 +144,7 @@ public class GCloudStorageTests {
     @Test
     public void testUploadFile() throws Exception {
         String bucketName = "gcloud-storage-tests-bucket-1";
-        String filePath = "test-file.txt";
+        String filePath = "test-file-2.txt";
 
         // Create the test file
         runCommand("echo 'Test content' > " + filePath);
